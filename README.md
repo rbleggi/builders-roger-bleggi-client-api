@@ -14,6 +14,8 @@ Dentre as dependências temos as seguintes:
 * Spring Web
 * Spring Data JPA
 * PostgreSQL
+* MongoDB
+* RabbitMQ  
 * Logback
 * Actuator
 * Mapstruct
@@ -36,7 +38,7 @@ Desenvolva uma REST API que:
 * Maven
 * JUnit
 * Lombok
-* Heroku + PosgreSQL
+* Heroku + PosgreSQL + RabbitMQ + MongoDB
 * GitHub
 * Jacoco
 * Mongodb
@@ -57,20 +59,39 @@ Também é possível acessar a ferramenta [grafana](http://localhost:3000) para 
 
 Foi garantido a cobertura de testes de 100% do código na camada de service e mapeamento onde se encontra todas as regras de negocio.
 
-Foi realizado auditoria utilizando rabbitmq e mongodb.
+Foi realizado auditoria utilizando [rabbitmq](http://localhost:15672) e mongodb com mongo express.
 
 # Instalação
 
-### Verificar cobertura de testes
-- `mvnw verify`
+### Web
+
+- [Heroku](https://builders-client-api.herokuapp.com/api/client/swagger-ui)
+
+### Requisitos
+
+- Java 16 (altarar `JAVA_HOME`)
+- Docker (`File sharing` habilitado)
+  ![img.png](documentacao/docker/img.png)
+- Docker Compose 
 
 ### Docker
+
 - `mvnw clean install package`
 - `docker-compose up`
 
 ### Local
+
 - `docker run -d -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=123 postgres`
 - `mvnw clean install spring-boot:run`
+- [Swagger](http://localhost:8090/api/client/swagger-ui/)
+- [Prometheus](http://localhost:9090)
+- [Grafana](http://localhost:3000)
+- [Graylog](http://localhost:9000)
+- [RabbitMQ](http://localhost:15672)
+- [MongoDB](http://localhost:8081)
+
+# Testes
+- `mvnw verify`
 
 #Configuração
 

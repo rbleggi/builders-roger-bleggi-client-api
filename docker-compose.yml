@@ -20,6 +20,19 @@ services:
     ports:
       - 27017:27017
 
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo-api
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+    ports:
+      - 8081:8081
+    links:
+      - mongo-api
+    depends_on:
+      - mongo-api
+
   #Mensageria
   rabbitmq:
     container_name: rabbitmq
