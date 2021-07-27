@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 123
+springdoc:
+  swagger-ui:
+    server.list: http://localhost:${server.port}${server.servlet.context-path}

@@ -1,0 +1,57 @@
+server:
+  port: 8090
+  servlet.context-path: /api/client
+  compression.enabled: true
+  error.include-message: always
+management:
+  endpoints.web.exposure.include: metrics,prometheus,health
+  endpoint:
+    prometheus.enabled: true
+    metrics.enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram.http.server.requests: true
+      sla.http.server.requests: 10ms,100ms,150ms,250ms,500ms,1s
+      percentiles.http.server.requests: 0.95,0.99
+    export.prometheus.enabled: true
+spring:
+  profiles.default: local
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 20000
+  jpa:
+    hibernate.ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: public
+        format_sql: true
+  liquibase:
+    enabled: true
+  application.name: client-api
+  main.web-application-type: SERVLET
+  jackson:
+    serialization.WRITE_DATES_AS_TIMESTAMPS: false
+    serialization.INDENT_OUTPUT: true
+    deserialization.fail-on-unknown-properties: false
+    default-property-inclusion: NON_ABSENT
+  web:
+    locale: pt_BR
+    localeResolver: fixed
+springdoc:
+  override-with-generic-response: false
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    doc-expansion: none
+    operations-sorter: alpha
+    tags-sorter: alpha
+    filter: true
+    path: /swagger-ui
+    disable-swagger-default-url: true
+    csrf.enabled: false
+  default-produces-media-type: application/json

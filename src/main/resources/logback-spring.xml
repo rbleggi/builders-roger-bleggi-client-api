@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <springProfile name="docker">
+        <appender name="GRAYLOG" class="de.siegmar.logbackgelf.GelfUdpAppender">
+            <graylogHost>graylog</graylogHost>
+            <graylogPort>12201</graylogPort>
+            <useCompression>true</useCompression>
+            <encoder class="de.siegmar.logbackgelf.GelfEncoder">
+                <includeMarker>true</includeMarker>
+                <includeMdcData>true</includeMdcData>
+                <includeCallerData>true</includeCallerData>
+                <includeLevelName>true</includeLevelName>
+                <shortPatternLayout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%ex{short}%.100m</pattern>
+                </shortPatternLayout>
+                <fullPatternLayout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+                </fullPatternLayout>
+                <staticField>app_name:client-api</staticField>
+                <staticField>app_profile:${SPRING_PROFILES_ACTIVE}</staticField>
+                <staticField>os_arch:${os.arch}</staticField>
+                <staticField>os_name:${os.name}</staticField>
+                <staticField>os_version:${os.version}</staticField>
+            </encoder>
+        </appender>
+        <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+            <http>
+                <url>http://loki:3100/loki/api/v1/push</url>
+            </http>
+            <format>
+                <label>
+                    <pattern>app=client-api,host=${HOSTNAME},level=%level</pattern>
+                </label>
+                <message>
+                    <pattern>l=%level h=${HOSTNAME} c=%logger{20} t=%thread | %msg %ex</pattern>
+                </message>
+                <sortByTime>true</sortByTime>
+            </format>
+        </appender>
+    </springProfile>
+
+    <springProfile name="local,heroku">
+        <logger name="org.springframework" additivity="false" level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="org.springframework.data" additivity="false" level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="br.com.builders.client.api" additivity="false" level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <root level="WARN" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="docker">
+        <logger name="org.springframework" additivity="false" level="INFO">
+            <appender-ref ref="GRAYLOG"/>
+            <appender-ref ref="LOKI"/>
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="org.springframework.data" additivity="false" level="DEBUG">
+            <appender-ref ref="GRAYLOG"/>
+            <appender-ref ref="LOKI"/>
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="br.com.builders.client.api" additivity="false" level="DEBUG">
+            <appender-ref ref="GRAYLOG"/>
+            <appender-ref ref="LOKI"/>
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <root level="WARN" additivity="false">
+            <appender-ref ref="GRAYLOG"/>
+            <appender-ref ref="LOKI"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+</configuration>

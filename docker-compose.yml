@@ -1,0 +1,97 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  #DBs
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+    ports:
+      - 5432:5432
+
+  client-api:
+    container_name: client-api
+    image: client-api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    ports:
+      - 8090:8090
+    links:
+      - postgres
+    depends_on:
+      - postgres
+
+  #Logs
+  mongo:
+    container_name: mongo
+    image: mongo:4.2
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
+  graylog:
+    container_name: graylog
+    image: graylog/graylog:4.1.1
+    environment:
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
+      - GRAYLOG_ELASTICSEARCH_VERSION=7
+    links:
+      - mongo
+      - elasticsearch
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      - 9000:9000
+      - 1514:1514
+      - 1514:1514/udp
+      - 12201:12201
+      - 12201:12201/udp
+      - 5555:5555
+
+  #Metricas
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - 9090:9090
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+
+  loki:
+    container_name: loki
+    image: grafana/loki
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    container_name: promtail
+    image: grafana/promtail
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
