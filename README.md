@@ -93,7 +93,7 @@ Foi realizado auditoria utilizando [rabbitmq](http://localhost:15672) e mongodb 
 # Testes
 - `mvnw verify`
 
-#Configuração
+# Configuração
 
 - [Grafana](documentacao/grafana/README.md)
 - [Graylog](documentacao/graylog/README.md)
