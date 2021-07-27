@@ -3,6 +3,15 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+  rabbitmq:
+    host: ${AMQP_API_HOST}
+    port: ${AMQP_API_PORT}
+    virtualHost: ${AMQP_API_VHOST}
+    username: ${AMQP_API_USERNAME}
+    password: ${AMQP_API_PASSWORD}
+  data:
+    mongodb:
+      uri: ${MONGO_API}
 springdoc:
   swagger-ui:
     server.list: ${SERVER_URL}${server.servlet.context-path}

@@ -39,6 +39,8 @@ Desenvolva uma REST API que:
 * Heroku + PosgreSQL
 * GitHub
 * Jacoco
+* Mongodb
+* Rabbitmq
 
 ## Motivação para escolha das Tecnologias
 Como se trata de um projeto de pequeno porte, tais tecnologias foram selecionadas de forma a aproveitar bem as facilidades que são propostas para atender as demandas de qualidade e simplicidade de design da solução.
@@ -54,6 +56,8 @@ Rodando a aplicação com docker compose é possível acessar a ferramenta [gray
 Também é possível acessar a ferramenta [grafana](http://localhost:3000) para monitoramento de metricas, logs e alarmes.
 
 Foi garantido a cobertura de testes de 100% do código na camada de service e mapeamento onde se encontra todas as regras de negocio.
+
+Foi realizado auditoria utilizando rabbitmq e mongodb.
 
 # Instalação
 

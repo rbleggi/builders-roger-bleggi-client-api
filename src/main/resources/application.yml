@@ -55,3 +55,16 @@ springdoc:
     disable-swagger-default-url: true
     csrf.enabled: false
   default-produces-media-type: application/json
+api:
+  event:
+    client:
+      exchange: client.exchange
+    audit:
+      client:
+        queue: client.audit.queue
+        error:
+          queue: client.audit.error.queue
+          ttl: 30000
+        parking:
+          lot:
+            queue: client.audit.parkinglot.queue

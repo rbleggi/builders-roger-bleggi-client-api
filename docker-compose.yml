@@ -14,6 +14,21 @@ services:
     ports:
       - 5432:5432
 
+  mongo-api:
+    container_name: mongo-api
+    image: mongo:4.2
+    ports:
+      - 27017:27017
+
+  #Mensageria
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+      - 15692:15692
+
   client-api:
     container_name: client-api
     image: client-api

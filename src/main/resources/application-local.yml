@@ -3,6 +3,15 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 123
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtualHost: /
+    username: guest
+    password: guest
+  data:
+    mongodb:
+      uri: mongodb://localhost/auditClient?retryWrites=true&w=majority
 springdoc:
   swagger-ui:
     server.list: http://localhost:${server.port}${server.servlet.context-path}
