@@ -5,7 +5,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   rabbitmq:
     host: ${AMQP_API_HOST}
-    port: ${AMQP_API_PORT}
+    port:
     virtualHost: ${AMQP_API_VHOST}
     username: ${AMQP_API_USERNAME}
     password: ${AMQP_API_PASSWORD}
